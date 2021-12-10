@@ -1,0 +1,14 @@
+{%extends 'app/main.html'%}
+{%block content%}
+<div class="row" style="">
+    <div class="col-md-7">
+        <h4 class="text-center">Авторизация</h4>
+        <form action="" method="POST">
+            {% csrf_token %}
+            {{form}}
+            <input type="submit" class="btn btn-outline-dark" value="Войти">
+        </form>
+    </div>
+</div>
+
+{%endblock%}
