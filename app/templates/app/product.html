@@ -1,0 +1,14 @@
+{%extends 'app/main.html'%}
+{%block content%}
+<div class="row">
+    <div class="col-md-4">
+        <img src="{{product.image.url}}" class="img-fluid">
+        <a href="#"><button type="button" class="btn btn-outline-dark">Добавить в корзину</button></a>
+    </div>
+    <div class="col-md-8">
+        <h3>{{product.title}}</h3>
+        <p>Описание {{product.description}}</p>
+        <p >Характеристики</p>
+    </div>
+</div>
+{%endblock%}

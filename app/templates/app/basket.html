@@ -1,0 +1,29 @@
+{%extends 'app/main.html'%}
+{%block content%}
+<h3 class="text-center">Корзина {%if not basket.products.count%} пуста</h3>
+{%else%}
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">Название</th>
+      <th scope="col">Картинка</th>
+      <th scope="col">Цена</th>
+      <th scope="col">Количество</th>
+      <th scope="col">Общая цена</th>
+    </tr>
+  </thead>
+  <tbody>
+  {%for basketproduct in basket.products.all%}
+
+    <tr>
+      <th scope="row"><strong>{{basketproduct.product.title}}</strong></th>
+      <td>{{basketproduct.product.image}}</td>
+      <td>{{basketproduct.product.price}}</td>
+      <td>{{basketproduct.quantity}}</td>
+      <td>{{basketproduct.final_price}}</td>
+    </tr>
+  {%endfor%}
+  </tbody>
+</table>
+{%endif%}
+{%endblock%}
