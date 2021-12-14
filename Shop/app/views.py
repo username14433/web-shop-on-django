@@ -92,3 +92,10 @@ class ReistrationView(View):
         context = {'form': form}
         return render(request, 'app/login.html', context)
 
+class DeleteBasketProductView(View):
+    def get(self, *args, **kwargs):
+        slug = kwargs.get('slug')
+        product = Product.objects.get(slug=slug)
+        product.delete()
+
+
