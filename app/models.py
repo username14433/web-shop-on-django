@@ -10,6 +10,7 @@ class Customer(models.Model):
     phone = models.CharField(max_length=255)
     email = models.CharField(max_length=255)
     address = models.CharField(max_length=255)
+    orders = models.ManyToManyField('Order', related_name='related_custoomer')
 
     def __str__(self):
         return self.user.first_name, self.user.last_name
@@ -52,11 +53,16 @@ class BasketProduct(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     cart = models.ForeignKey(Basket, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField('Количество товара в корзине', default=1)
-    final_price = models.DecimalField('Финальная цена товара', max_digits=9, decimal_places=2)
-
+    final_price = models.DecimalField('Финальная цена товара', max_digits=9, decimal_places=2, null=True)
     def __str__(self):
         return f'Продукт {self.product.title}'
 
 
 class Order(models.Model):
-    pass
+    user = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='related_orders')
+    basket = models.ForeignKey(Basket, on_delete=models.CASCADE)
+    first_name = models.CharField(max_length=40)
+    last_name = models.CharField(40, max_length=40)
+    address = models.CharField(65, max_length=65)
+    make_order_date = models.DateTimeField(10)
+    get_order_date = models.DateTimeField(10)

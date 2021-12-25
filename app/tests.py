@@ -30,3 +30,6 @@ class ShopTestCases(TestCase):
         response = AddToBasketView.as_view()(request, slug='test')
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response.url, '/basket/')
+
+
+

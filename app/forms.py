@@ -1,5 +1,5 @@
 from django import forms
-from .models import User
+from .models import User, Order
 
 
 class LoginForm(forms.ModelForm):
@@ -42,3 +42,16 @@ class RegistrationForm(forms.ModelForm):
         if user:
             raise forms.ValidationError('Такое имя уже существует!')
         return username
+
+class OrderForm(forms.ModelForm):
+    class Meta:
+        model = Order
+        fields = (
+            'first_name',
+            'last_name',
+            'address',
+            'basket',
+            'make_order_date',
+            'get_order_date',
+            'user'
+        )

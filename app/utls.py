@@ -10,6 +10,7 @@ class BasketMixin(View):
             customer = Customer.objects.get(user=user)
             if not customer:
                 customer = Customer.objects.create(user=user)
+            self.customer = customer
             basket = Basket.objects.get(owner=customer)
             if not basket:
                 basket = Basket.objects.create(owner=customer)

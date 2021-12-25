@@ -2,6 +2,7 @@
 {%block content%}
 <h3 class="text-center">Корзина {%if not basket.products.count%} пуста</h3>
 {%else%}
+
 <table class="table">
   <thead>
     <tr>
@@ -10,6 +11,7 @@
       <th scope="col">Цена</th>
       <th scope="col">Количество</th>
       <th scope="col">Общая цена</th>
+      <th scope="col"></th>
     </tr>
   </thead>
   <tbody>
@@ -17,13 +19,22 @@
 
     <tr>
       <th scope="row"><strong>{{basketproduct.product.title}}</strong></th>
-      <td>{{basketproduct.product.image}}</td>
+      <td class="w-25"><img class="img-fluid" src="{{basketproduct.product.image.url}}" alt=""></td>
       <td>{{basketproduct.product.price}}</td>
-      <td>{{basketproduct.quantity}}</td>
+      <td>
+        <form action="{%url 'edit_basket_product_quantity' slug=basketproduct.product.slug%}" method="POST">
+          {%csrf_token%}
+          <input style="width: 75px;" type="number" class="form-control" name="qty" min="1" value="{{basketproduct.quantity}}">
+
+          <input type="submit" class="btn btn-outline-dark" value="Ок">
+        </form>
+      </td>
       <td>{{basketproduct.final_price}}</td>
+      <td><a  href="{%url 'delete_from_basket'  slug=basketproduct.product.slug%}"><button class="btn btn-outline-dark" type="submit" >Удалить </button></a></td>
     </tr>
   {%endfor%}
   </tbody>
 </table>
 {%endif%}
+<a href="{%url 'make_order'%}"><button class="btn btn-outline-dark" type="submit">Купить</button></a>
 {%endblock%}
