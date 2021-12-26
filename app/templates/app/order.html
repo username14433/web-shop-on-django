@@ -1,10 +1,32 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-Оно работает!
-</body>
-</html>
+{%extends 'app/main.html'%}
+{%block content%}
+<table class="table">
+    <thead>
+    <tr>
+        <th scope="col">Название</th>
+        <th scope="col">Картинка</th>
+        <th scope="col">Цена</th>
+        <th scope="col">Количество</th>
+        <th scope="col">Общая цена</th>
+        <th scope="col"></th>
+    </tr>
+    </thead>
+    <tbody>
+    {%for basketproduct in basket.products.all%}
+
+    <tr>
+        <th scope="row"><strong>{{basketproduct.product.title}}</strong></th>
+        <td class="w-25"><img class="img-fluid" src="{{basketproduct.product.image.url}}" alt=""></td>
+        <td>{{basketproduct.product.price}}</td>
+        <td>{{basketproduct.quantity}}</td>
+        <td>{{basketproduct.final_price}}</td>
+    </tr>
+    {%endfor%}
+    </tbody>
+</table>
+<form method="post" action="{%url 'make_order'%}">
+    {%csrf_token%}
+    <div class="col-md-7">{{form}}</div>
+    <input type="submit" class="btn btn-outline-dark" value="Оплатить">
+</form>
+{%endblock%}

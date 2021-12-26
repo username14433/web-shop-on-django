@@ -107,7 +107,7 @@ class LoginView(View):
 
 
 class ReistrationView(View):
-    def get(self, request, *args, **kwargs):
+    def get(self, request):
         form = LoginForm(request.POST or None)
 
         context = {'form': form, }
@@ -125,32 +125,35 @@ class ReistrationView(View):
         context = {'form': form}
         return render(request, 'app/login.html', context)
 
-class BuyBasketView(View):
+
+class BuyBasketView(BasketMixin, View):
     def get(self, request, *args, **kwargs):
         form = OrderForm(request.POST or None)
-        return render(request, 'app/order.html')
+        context = {'basket': self.basket, 'form': form}
+        return render(request, 'app/order.html', context)
 
 
 class OrderView(BasketMixin, View):
     def post(self, request, *args, **kwargs):
         form = OrderForm(request.POST or None)
         order_form_fields = ['first_name',
-            'last_name',
-            'address',
-            'basket',
-            'make_order_date',
-            'get_order_date',
-        ]
+                             'last_name',
+                             'address',
+                             'basket',
+                             'make_order_date',
+                             'get_order_date',
+                             ]
         if form.is_valid():
             new_order = form.save()
-            new_order.user = self.customer
+            new_order.customer = self.customer
+            print(new_order)
             for new_order_field in order_form_fields:
                 new_order.new_order_field = form.cleaned_data[f'{new_order_field}']
             new_order.save()
-            self.basket.in_order=True
+            self.basket.in_order = True
             self.basket.save()
             new_order.basket = self.basket
             new_order.save()
             self.customer.orders.add(new_order)
             return redirect('/')
-        return redirect('app/make_order.html')
+        return redirect('/order/')

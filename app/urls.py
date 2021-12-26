@@ -21,6 +21,7 @@ urlpatterns = [
          name='edit_basket_product_quantity'),
     path('delete-from-basket/<str:slug>/', DeleteBasketProductView.as_view(), name='delete_from_basket'),
     path('login/', LoginView.as_view(), name='login'),
-    path('make_order', OrderView.as_view(), name='make_order'),
+    path('order', BuyBasketView.as_view(), name='order'),
+    path('make-order', OrderView.as_view(), name='make_order'),
 
 ]

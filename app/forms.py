@@ -50,8 +50,6 @@ class OrderForm(forms.ModelForm):
             'first_name',
             'last_name',
             'address',
-            'basket',
-            'make_order_date',
-            'get_order_date',
-            'user'
+
+
         )
