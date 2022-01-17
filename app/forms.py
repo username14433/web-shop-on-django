@@ -43,13 +43,51 @@ class RegistrationForm(forms.ModelForm):
             raise forms.ValidationError('Такое имя уже существует!')
         return username
 
-class OrderForm(forms.ModelForm):
+class OrderForm(forms.ModelForm, forms.Form):
+    first_name = forms.CharField(required=True)
+    last_name = forms.CharField(required=True)
+    address = forms.CharField(required=True)
+    card_number = forms.IntegerField(required=True)
     class Meta:
         model = Order
         fields = (
             'first_name',
             'last_name',
-            'address',
-
-
+            'address'
         )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['card_number'].label = 'Номер карты'
+        self.fields['address'].label = 'Адрес доставки'
+        self.fields['first_name'].label = 'Имя'
+        self.fields['last_name'].label = 'Фамилия'
+
+
+
+    def clean(self):
+        card_number = self.cleaned_data['card_number']
+        address = self.cleaned_data['address']
+        first_name = self.cleaned_data['first_name']
+        last_name = self.cleaned_data['last_name']
+class HelpForm(forms.Form):
+    problem = forms.CharField(required=False)
+    question = forms.CharField(required=True)
+    username = forms.CharField(required=True)
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['problem'].label = 'Проблема'
+        self.fields['question'].label = 'Вопрос'
+        self.fields['username'].label = 'Имя пользователя'
+
+
+
+    def clean(self):
+        username = self.cleaned_data['username']
+        question = self.cleaned_data['question']
+        problem = self.cleaned_data['problem']
+        user = User.objects.filter(username=username)
+        if not user.exists():
+            raise forms.ValidationError(f'{username} не существует в системе')
+
+

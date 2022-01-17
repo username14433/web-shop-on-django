@@ -1,7 +1,7 @@
 from django.test import TestCase, RequestFactory
 from django.core.files.uploadedfile import SimpleUploadedFile
 from Shop.app.models import Category, Product, BasketProduct, Basket, Customer, User
-from Shop.app.views import AddToBasketView
+from Shop.app.views import AddToBasketView, HelpView
 
 
 class ShopTestCases(TestCase):
@@ -31,5 +31,13 @@ class ShopTestCases(TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response.url, '/basket/')
 
+
+    def test_help_view(self):
+        factory = RequestFactory()
+        request = factory.get('')
+        request.user = self.user
+        response = HelpView.as_view()(request, slug='test')
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, '/basket/')
 
 

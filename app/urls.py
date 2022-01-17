@@ -9,7 +9,8 @@ from .views import (
     LoginView,
     EditBasketProductQuantity,
     OrderView,
-    BuyBasketView
+    BuyBasketView,
+    HelpView,
 )
 
 urlpatterns = [
@@ -21,7 +22,8 @@ urlpatterns = [
          name='edit_basket_product_quantity'),
     path('delete-from-basket/<str:slug>/', DeleteBasketProductView.as_view(), name='delete_from_basket'),
     path('login/', LoginView.as_view(), name='login'),
-    path('order', BuyBasketView.as_view(), name='order'),
-    path('make-order', OrderView.as_view(), name='make_order'),
-
+    path('order/', BuyBasketView.as_view(), name='order'),
+    path('make-order/', OrderView.as_view(), name='make_order'),
+    path('help/', HelpView.as_view(), name='help'),
+    # path('successfully_sent_help', SuccessfullySentView.as_view(), name='successfull_sent')
 ]

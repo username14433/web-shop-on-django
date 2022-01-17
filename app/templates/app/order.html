@@ -8,7 +8,6 @@
         <th scope="col">Цена</th>
         <th scope="col">Количество</th>
         <th scope="col">Общая цена</th>
-        <th scope="col"></th>
     </tr>
     </thead>
     <tbody>
@@ -27,6 +26,6 @@
 <form method="post" action="{%url 'make_order'%}">
     {%csrf_token%}
     <div class="col-md-7">{{form}}</div>
-    <input type="submit" class="btn btn-outline-dark" value="Оплатить">
+    <a href="{%url 'make_order'%}"><input type="submit" class="btn btn-outline-dark" value="Оплатить"></a>
 </form>
 {%endblock%}

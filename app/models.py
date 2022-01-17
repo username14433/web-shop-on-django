@@ -1,6 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.db import models
 from django.urls import reverse
+from django.utils import timezone
 
 User = get_user_model()
 
@@ -49,7 +50,7 @@ class Basket(models.Model):
 
 
 class BasketProduct(models.Model):
-    user = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    user = models.ForeignKey(Customer, verbose_name='Пользователь', on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     cart = models.ForeignKey(Basket, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField('Количество товара в корзине', default=1)
@@ -61,8 +62,8 @@ class BasketProduct(models.Model):
 class Order(models.Model):
     user = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='related_orders')
     basket = models.ForeignKey(Basket, on_delete=models.CASCADE)
-    first_name = models.CharField(max_length=40)
-    last_name = models.CharField(max_length=40)
-    address = models.CharField(max_length=65)
-    make_order_date = models.DateTimeField()
-    get_order_date = models.DateField()
+    first_name = models.CharField(verbose_name='Имя', max_length=40)
+    last_name = models.CharField(verbose_name='Фамилия', max_length=40)
+    address = models.CharField(verbose_name='Адрес', max_length=65)
+    make_order_date = models.DateTimeField(verbose_name='Время составления заказа', default=timezone.now)
+    get_order_date = models.DateTimeField(verbose_name='Время получения заказа', default=timezone.now)
