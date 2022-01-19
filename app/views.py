@@ -130,6 +130,7 @@ class OrderView(BasketMixin, View):
         form = OrderForm(request.POST or None)
         context = {'form': form}
         return render(request, 'app/make-order.html', context)
+
     def post(self, request, *args, **kwargs):
         form = OrderForm(request.POST or None)
         print('hello')
@@ -148,7 +149,6 @@ class OrderView(BasketMixin, View):
             new_order.save()
             self.basket.in_order = True
             self.basket.save()
-            new_order.basket = self.basket
             new_order.save()
             self.customer.orders.add(new_order)
             return redirect('order/')
@@ -160,13 +160,18 @@ class HelpView(BasketMixin, View):
         form = HelpForm(request.POST or None)
         context = {'form': form}
         return render(request, 'app/help.html', context)
+
     def post(self, request, *args, **kwargs):
         customer_email = self.customer.email
         form = HelpForm(request.POST or None)
         if form.is_valid():
             help.send_email(f'hello {customer_email}')
-            return redirect('basket/')
-# class SuccessfullySentView(View, HelpForm):
-#     def get(self, request, *args, **kwargs):
-#         context = {'cleaned_data': self.cleaned_data}
-#         return render(request, 'app/successfully_sent_help.html', context)
+            return redirect('/')
+        else:
+            return redirect('/')
+
+
+class SuccessfullyBought(View):
+    def get(self, request, *args, **kwargs):
+        context = {'template': 'app/order_characteristic.html'}
+        return render(request, 'app/order_characteristic.html', context)

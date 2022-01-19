@@ -41,3 +41,4 @@ class ShopTestCases(TestCase):
         self.assertEqual(response.url, '/basket/')
 
 
+#
