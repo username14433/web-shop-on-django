@@ -1,4 +1,5 @@
 from django.contrib.auth import authenticate, login
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.views import View
 from django.views.generic import DetailView
@@ -151,7 +152,7 @@ class OrderView(BasketMixin, View):
             self.basket.save()
             new_order.save()
             self.customer.orders.add(new_order)
-            return redirect('order/')
+            return redirect('make-order/')
         return redirect('/')
 
 
@@ -175,3 +176,5 @@ class SuccessfullyBought(View):
     def get(self, request, *args, **kwargs):
         context = {'template': 'app/order_characteristic.html'}
         return render(request, 'app/order_characteristic.html', context)
+
+

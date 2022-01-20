@@ -1,5 +1,5 @@
 from django.urls import path
-
+from . import views
 from .views import (
     MainView,
     ProductView,
@@ -11,6 +11,7 @@ from .views import (
     OrderView,
     BuyBasketView,
     HelpView,
+
 )
 
 urlpatterns = [
@@ -25,5 +26,6 @@ urlpatterns = [
     path('order/', BuyBasketView.as_view(), name='order'),
     path('make-order/', OrderView.as_view(), name='make_order'),
     path('help/', HelpView.as_view(), name='help'),
+
     # path('successfully_sent_help', SuccessfullySentView.as_view(), name='successfull_sent')
 ]
