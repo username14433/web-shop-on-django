@@ -3,10 +3,11 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.views import View
 from django.views.generic import DetailView
-from .models import Product, BasketProduct
+from .models import Product, BasketProduct, Customer
 from .utils import BasketMixin, refresh_basket, get_basket_product
-from .forms import LoginForm, OrderForm, HelpForm
+from .forms import LoginForm, OrderForm, HelpForm, RegistrationForm
 from .email import help
+import random
 
 
 class MainView(View):
@@ -101,22 +102,26 @@ class LoginView(View):
 
 class RegistrationView(View):
     def get(self, request):
-        form = LoginForm(request.POST or None)
+        form = RegistrationForm(request.POST or None)
 
         context = {'form': form, }
-        return render(request, 'app/login.html', context)
+        return render(request, 'app/registration.html', context)
 
     def post(self, request, *args, **kwargs):
-        form = LoginForm(request.POST or None)
+        form = RegistrationForm(request.POST or None)
         if form.is_valid():
             username = form.cleaned_data['username']
             password = form.cleaned_data['password']
+            confirm_password = form.cleaned_data['confirm_password']
+            email = form.cleaned_data['email']
+            phone = form.cleaned_data['phone']
+            help.send_email('You are successfully logged in! Welcome to shop Shop!')
             user = authenticate(username=username, password=password)
+            # Customer.objects.create(user)
             login(request, user)
             return redirect('/')
-
         context = {'form': form}
-        return render(request, 'app/login.html', context)
+        return render(request, 'app/registration.html', context)
 
 
 class BuyBasketView(BasketMixin, View):
@@ -134,26 +139,22 @@ class OrderView(BasketMixin, View):
 
     def post(self, request, *args, **kwargs):
         form = OrderForm(request.POST or None)
-        print('hello')
-        basket = self.basket
+
         if form.is_valid():
-            new_order = form.save()
+            new_order = form.save(commit=False)
             new_order.basket = self.basket
-            new_order.customer = self.customer
+            new_order.user = self.basket.owner
             new_order.first_name = form.cleaned_data['first_name']
             new_order.last_name = form.cleaned_data['last_name']
             new_order.address = form.cleaned_data['address']
-            new_order.make_order_date = form.cleaned_data['make_order_date']
-            new_order.get_order_date = form.cleaned_data['get_order_date']
-            new_order.card_number = form.cleaned_data['card_number']
-            print(new_order)
             new_order.save()
             self.basket.in_order = True
             self.basket.save()
             new_order.save()
             self.customer.orders.add(new_order)
-            return redirect('make-order/')
-        return redirect('/')
+            help.send_email(f"Hello! Your order successfully completed. The number of order is - {random.randint(1000000, 100000000000)}")
+            return redirect('/')
+        return redirect('/order/')
 
 
 class HelpView(BasketMixin, View):
@@ -165,8 +166,15 @@ class HelpView(BasketMixin, View):
     def post(self, request, *args, **kwargs):
         customer_email = self.customer.email
         form = HelpForm(request.POST or None)
+        help.send_email(f'Hello {customer_email}. Technical support will reply to you soon')
+        print(f"=================\n"
+              f"{form.errors}\n"
+              f"=================")
         if form.is_valid():
-            help.send_email(f'hello {customer_email}')
+
+            print(f"=================\n"
+                  f"{form.errors}\n"
+                  f"=================")
             return redirect('/')
         else:
             return redirect('/')
@@ -176,5 +184,3 @@ class SuccessfullyBought(View):
     def get(self, request, *args, **kwargs):
         context = {'template': 'app/order_characteristic.html'}
         return render(request, 'app/order_characteristic.html', context)
-
-

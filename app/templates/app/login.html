@@ -5,8 +5,8 @@
         <h4 class="text-center">Авторизация</h4>
         <form action="" method="POST">
             {% csrf_token %}
-            {{form}}
-            <input type="submit" class="btn btn-outline-dark" value="Войти">
+            <div>{{form}}</div>
+            <a href="{%url 'main'%}"><input type="submit" class="btn btn-outline-dark" value="Войти"></a>
         </form>
     </div>
 </div>

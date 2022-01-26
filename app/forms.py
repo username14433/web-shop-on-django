@@ -1,5 +1,5 @@
 from django import forms
-from .models import User, Order
+from .models import User, Order, BasketProduct
 
 
 class LoginForm(forms.ModelForm):
@@ -28,13 +28,14 @@ class LoginForm(forms.ModelForm):
 
 class RegistrationForm(forms.ModelForm):
     phone = forms.CharField(required=False)
-    email = forms.CharField(required=False)
+    email = forms.EmailField(required=False)
     confirm_password = forms.CharField(widget=forms.PasswordInput)
     password = forms.CharField(widget=forms.PasswordInput)
 
     class Meta:
         model = User
         fields = ('username', 'password', 'email', 'phone', 'confirm_password')
+
 
     def clean_username(self):
         username = self.cleaned_data['username']
@@ -48,25 +49,23 @@ class OrderForm(forms.ModelForm, forms.Form):
     first_name = forms.CharField(required=True)
     last_name = forms.CharField(required=True)
     address = forms.CharField(required=True)
-    card_number = forms.IntegerField(required=True)
 
     class Meta:
         model = Order
         fields = (
             'first_name',
             'last_name',
-            'address'
+            'address',
         )
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['card_number'].label = 'Номер карты'
+
         self.fields['address'].label = 'Адрес доставки'
         self.fields['first_name'].label = 'Имя'
         self.fields['last_name'].label = 'Фамилия'
 
     def clean(self):
-        card_number = self.cleaned_data['card_number']
         address = self.cleaned_data['address']
         first_name = self.cleaned_data['first_name']
         last_name = self.cleaned_data['last_name']
@@ -90,3 +89,16 @@ class HelpForm(forms.Form):
         user = User.objects.filter(username=username)
         if not user.exists():
             raise forms.ValidationError(f'{username} не существует в системе')
+
+# class QuantityForm(forms.ModelForm):
+#     quantity = forms.IntegerField(required=True)
+#     class Meta:
+#         model = BasketProduct
+#         fields = (
+#             'quantity',
+#         )
+#     def __init__(self, *args, **kwargs):
+#         super().__init__(*args, **kwargs)
+#         self.fields['quantity'].label = 'quantity'
+#     def clean(self):
+#         quantity = self.cleaned_data['quantity']

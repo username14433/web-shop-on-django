@@ -11,7 +11,7 @@ from .views import (
     OrderView,
     BuyBasketView,
     HelpView,
-
+    RegistrationView,
 )
 
 urlpatterns = [
@@ -26,6 +26,7 @@ urlpatterns = [
     path('order/', BuyBasketView.as_view(), name='order'),
     path('make-order/', OrderView.as_view(), name='make_order'),
     path('help/', HelpView.as_view(), name='help'),
+    path('registration/', RegistrationView.as_view(), name='registration'),
 
     # path('successfully_sent_help', SuccessfullySentView.as_view(), name='successfull_sent')
 ]

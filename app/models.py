@@ -67,3 +67,6 @@ class Order(models.Model):
     address = models.CharField(verbose_name='Адрес', max_length=65)
     make_order_date = models.DateTimeField(verbose_name='Время составления заказа', default=timezone.now)
     get_order_date = models.DateTimeField(verbose_name='Время получения заказа', default=timezone.now)
+
+    def __str__(self):
+        return f'{str(self.id)}'

@@ -1,0 +1,14 @@
+{%extends 'app/main.html'%}
+{%block content%}
+<div class="row" style="">
+    <div class="col-md-7">
+        <h4 class="text-center">Регистрция</h4>
+        <form action="" method="POST">
+            {%csrf_token%}
+            {{form}}
+            <a href="{%url 'registration'%}"><input type="submit" class="btn btn-outline-dark" value="Зарегистрироваться"></a>
+        </form>
+    </div>
+</div>
+
+{%endblock%}
