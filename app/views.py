@@ -110,14 +110,17 @@ class RegistrationView(View):
     def post(self, request, *args, **kwargs):
         form = RegistrationForm(request.POST or None)
         if form.is_valid():
-            username = form.cleaned_data['username']
-            password = form.cleaned_data['password']
-            confirm_password = form.cleaned_data['confirm_password']
-            email = form.cleaned_data['email']
-            phone = form.cleaned_data['phone']
-            help.send_email('You are successfully logged in! Welcome to shop Shop!')
-            user = authenticate(username=username, password=password)
-            # Customer.objects.create(user)
+            new_user = form.save(commit=False)
+            new_user.username = form.cleaned_data['username']
+            new_user.password = form.cleaned_data['password']
+            new_user.confirm_password = form.cleaned_data['confirm_password']
+            new_user.email = form.cleaned_data['email']
+
+            new_user.save()
+            Customer.objects.create(user=new_user, phone=form.cleaned_data['phone'])
+            # help.send_email('You are successfully logged in! Welcome to shop Shop!')
+            user = authenticate(username=new_user.username, password=new_user.password)
+
             login(request, user)
             return redirect('/')
         context = {'form': form}
@@ -152,7 +155,8 @@ class OrderView(BasketMixin, View):
             self.basket.save()
             new_order.save()
             self.customer.orders.add(new_order)
-            help.send_email(f"Hello! Your order successfully completed. The number of order is - {random.randint(1000000, 100000000000)}")
+            help.send_email(
+                f"Hello! Your order successfully completed. The number of order is - {random.randint(1000000, 100000000000)}")
             return redirect('/')
         return redirect('/order/')
 

@@ -27,6 +27,7 @@ class LoginForm(forms.ModelForm):
 
 
 class RegistrationForm(forms.ModelForm):
+    username = forms.CharField(required=True)
     phone = forms.CharField(required=False)
     email = forms.EmailField(required=False)
     confirm_password = forms.CharField(widget=forms.PasswordInput)
